@@ -1,8 +1,4 @@
-import './lib/lib';
+import $ from './lib/lib';
 
-$('.active').on('click', sayHello);
-$('.active').off('click', sayHello);
-
-function sayHello() {
-    console.log('Hello');
-}
+$('.active').setAttr('data-test', 'value-3');
+console.log($('.active').getAttr('data-test'));

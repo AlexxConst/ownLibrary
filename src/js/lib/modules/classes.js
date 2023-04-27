@@ -23,3 +23,11 @@ $.prototype.toggleClass = function (classNames) {
 
     return this;
 };
+
+$.prototype.setAttr = function (attrName, value) {
+    return this[0].setAttribute(attrName, value);
+};
+
+$.prototype.getAttr = function (attrName) {
+    return this[0].getAttribute(attrName);
+};

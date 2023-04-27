@@ -20,6 +20,11 @@ $.prototype.init = function (selector) {
     return this; // {}
   }
 
+  if (selector.tagName) {
+    this[0] = selector;
+    this.length = 1;
+    return this;
+  }
   Object.assign(this, document.querySelectorAll(selector));
   this.length = document.querySelectorAll(selector).length;
   return this;
@@ -118,6 +123,12 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.toggleClass = function (
     this[i].classList.toggle(classNames);
   }
   return this;
+};
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.setAttr = function (attrName, value) {
+  return this[0].setAttribute(attrName, value);
+};
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.getAttr = function (attrName) {
+  return this[0].getAttribute(attrName);
 };
 
 /***/ }),
@@ -230,11 +241,8 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_lib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./lib/lib */ "./src/js/lib/lib.js");
 
-$('.active').on('click', sayHello);
-$('.active').off('click', sayHello);
-function sayHello() {
-  console.log('Hello');
-}
+(0,_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('.active').setAttr('data-test', 'value-3');
+console.log((0,_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('.active').getAttr('data-test'));
 })();
 
 /******/ })()
