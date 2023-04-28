@@ -31,3 +31,11 @@ $.prototype.setAttr = function (attrName, value) {
 $.prototype.getAttr = function (attrName) {
     return this[0].getAttribute(attrName);
 };
+
+$.prototype.removeAttr = function (attrName) {
+    for (let i = 0; i < this.length; i++) {
+        this[i].removeAttribute(attrName);
+    }
+
+    return this;
+};
