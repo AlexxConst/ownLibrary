@@ -49,13 +49,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_classes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/classes */ "./src/js/lib/modules/classes.js");
 /* harmony import */ var _modules_handlers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/handlers */ "./src/js/lib/modules/handlers.js");
 /* harmony import */ var _modules_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/actions */ "./src/js/lib/modules/actions.js");
-/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./core */ "./src/js/lib/core.js");
+/* harmony import */ var _modules_effects__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/effects */ "./src/js/lib/modules/effects.js");
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./core */ "./src/js/lib/core.js");
 
 
 
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_core__WEBPACK_IMPORTED_MODULE_4__["default"]);
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_core__WEBPACK_IMPORTED_MODULE_5__["default"]);
 
 /***/ }),
 
@@ -110,6 +112,46 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.find = function (selecto
       counter++;
     }
     numberOfItems += arr.length;
+  }
+  this.length = numberOfItems;
+  const objLength = Object.keys(this).length;
+  for (; numberOfItems < objLength; numberOfItems++) {
+    delete this[numberOfItems];
+  }
+  return this;
+};
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.closest = function (selector, defaultValue) {
+  let counter = 0;
+  for (let i = 0; i < this.length; i++) {
+    const closestElement = this[i].closest(selector);
+    if (closestElement) {
+      this[i] = closestElement;
+    } else {
+      const defaultElem = defaultValue || document.createElement('div');
+      this[0] = defaultElem;
+    }
+    counter++;
+  }
+  const objLength = Object.keys(this).length;
+  for (; counter < objLength; counter++) {
+    delete this[counter];
+  }
+  return this;
+};
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.siblings = function () {
+  let numberOfItems = 0;
+  let counter = 0;
+  const copyObj = Object.assign({}, this);
+  for (let i = 0; i < copyObj.length; i++) {
+    const arr = copyObj[i].parentNode.children;
+    for (let j = 0; j < arr.length; j++) {
+      if (copyObj[i] === arr[j]) {
+        continue;
+      }
+      this[counter] = arr[j];
+      counter++;
+    }
+    numberOfItems += arr.length - 1;
   }
   this.length = numberOfItems;
   const objLength = Object.keys(this).length;
@@ -200,6 +242,61 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.toggle = function () {
     } else {
       this[i].style.display = 'none';
     }
+  }
+  return this;
+};
+
+/***/ }),
+
+/***/ "./src/js/lib/modules/effects.js":
+/*!***************************************!*\
+  !*** ./src/js/lib/modules/effects.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.animateOverTime = function (duration, callback, finish) {
+  let timeStart;
+  function _animateOverTime(time) {
+    if (!timeStart) {
+      timeStart = time;
+    }
+    let timeElapsed = time - timeStart;
+    let completion = Math.min(timeElapsed / duration, 1);
+    callback(completion);
+    if (timeElapsed < duration) {
+      requestAnimationFrame(_animateOverTime);
+    } else {
+      if (typeof finish === 'function') {
+        finish();
+      }
+    }
+  }
+  return _animateOverTime;
+};
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeIn = function (duration, display, finish) {
+  for (let i = 0; i < this.length; i++) {
+    this[i].style.display = display || 'block';
+    const _fadeIn = completion => {
+      this[i].style.opacity = completion;
+    };
+    const ani = this.animateOverTime(duration, _fadeIn, finish);
+    requestAnimationFrame(ani);
+  }
+  return this;
+};
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeOut = function (duration, finish) {
+  for (let i = 0; i < this.length; i++) {
+    const _fadeOut = completion => {
+      this[i].style.opacity = 1 - completion;
+      if (completion === 1) {
+        this[i].style.display = 'none';
+      }
+    };
+    const ani = this.animateOverTime(duration, _fadeOut, finish);
+    requestAnimationFrame(ani);
   }
   return this;
 };
@@ -317,7 +414,12 @@ __webpack_require__.r(__webpack_exports__);
 (0,_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('div').click(function () {
   console.log((0,_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])(this).index());
 });
-console.log((0,_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('div').eq(2).find('.some'));
+
+// console.log($('div').eq(2).find('.some'));
+
+// console.log($('.some').closest('.findmeq').addClass('wdadwdads'));
+
+(0,_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('button').fadeIn(1800);
 
 // $('.active').setAttr('data-test', 'value-3');
 
