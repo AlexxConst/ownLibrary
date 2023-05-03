@@ -1,4 +1,4 @@
-modules.exports = {
+module.exports = {
     parserOptions: {
         sourceType: 'modules',
     },
